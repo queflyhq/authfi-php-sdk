@@ -2,7 +2,7 @@
   "name": "queflyhq/authfi",
   "description": "AuthFI PHP SDK — JWT validation, RBAC middleware, permission auto-sync",
   "type": "library",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "autoload": {
     "classmap": ["AuthFI.php"]
   },
