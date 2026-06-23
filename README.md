@@ -53,8 +53,12 @@ $creds = $auth->cloudCredentials($userToken, 'gcp', project: 'my-project');
 ## Running Tests
 
 ```bash
+composer install   # pulls firebase/php-jwt
 php test_authfi.php
 ```
+
+Signature tests generate an in-process RSA keypair, so they run offline and
+need the OpenSSL extension enabled.
 
 ## License
 
