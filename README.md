@@ -1,6 +1,6 @@
 # AuthFI PHP SDK
 
-Official PHP SDK for [AuthFI](https://authfi.app) — the identity control plane.
+Official PHP SDK for [AuthFI](https://authfi.io) — the identity control plane.
 
 ## Install
 

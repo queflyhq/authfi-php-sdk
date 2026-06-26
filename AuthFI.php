@@ -42,7 +42,7 @@ class AuthFI {
     public function __construct(
         string $tenant,
         string $apiKey,
-        string $apiUrl = 'https://api.authfi.app',
+        string $apiUrl = 'https://api.authfi.io',
         ?string $applicationId = null,
         int $jwksTtl = 300,
         int $leeway = 60
@@ -60,7 +60,7 @@ class AuthFI {
      * AuthFI issues tokens under the tenant subdomain.
      */
     private function issuer(): string {
-        return "https://{$this->tenant}.authfi.app";
+        return "https://{$this->tenant}.authfi.io";
     }
 
     /** Tenant-scoped JWKS endpoint. */

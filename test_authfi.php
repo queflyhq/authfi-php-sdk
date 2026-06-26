@@ -130,7 +130,7 @@ test('accepts a validly-signed token', function() {
         'roles' => ['admin', 'editor'],
         'permissions' => ['read:users', 'write:users'],
         'org_slug' => 'acme-corp',
-        'iss' => 'https://acme.authfi.app',
+        'iss' => 'https://acme.authfi.io',
         'iat' => time() - 10,
         'exp' => time() + 3600,
     ]);
@@ -151,7 +151,7 @@ test('rejects a tampered payload (signature no longer matches)', function() {
     $token = sign_token($priv, [
         'sub' => 'usr_123',
         'permissions' => ['read:users'],
-        'iss' => 'https://acme.authfi.app',
+        'iss' => 'https://acme.authfi.io',
         'exp' => time() + 3600,
     ]);
 
@@ -160,7 +160,7 @@ test('rejects a tampered payload (signature no longer matches)', function() {
     $forgedPayload = rtrim(strtr(base64_encode(json_encode([
         'sub' => 'usr_123',
         'permissions' => ['read:users', 'write:users', 'delete:users'],
-        'iss' => 'https://acme.authfi.app',
+        'iss' => 'https://acme.authfi.io',
         'exp' => time() + 3600,
     ])), '+/', '-_'), '=');
     $tampered = "$h.$forgedPayload.$s";
@@ -180,7 +180,7 @@ test('rejects a forged token signed with the wrong key', function() {
     $token = sign_token($attackerPriv, [
         'sub' => 'attacker',
         'permissions' => ['delete:users'],
-        'iss' => 'https://acme.authfi.app',
+        'iss' => 'https://acme.authfi.io',
         'exp' => time() + 3600,
     ]);
 
@@ -194,7 +194,7 @@ test('rejects an "alg: none" downgrade attempt', function() {
     seed_jwks($auth, jwks_from($details));
 
     $h = b64url(json_encode(['alg' => 'none', 'typ' => 'JWT', 'kid' => TEST_KID]));
-    $p = b64url(json_encode(['sub' => 'usr_123', 'iss' => 'https://acme.authfi.app', 'exp' => time() + 3600]));
+    $p = b64url(json_encode(['sub' => 'usr_123', 'iss' => 'https://acme.authfi.io', 'exp' => time() + 3600]));
     $token = "$h.$p.";
 
     $e = assert_throws(AuthFIException::class, fn() => $auth->verifyToken($token));
@@ -208,7 +208,7 @@ test('rejects an expired token', function() {
 
     $token = sign_token($priv, [
         'sub' => 'usr_123',
-        'iss' => 'https://acme.authfi.app',
+        'iss' => 'https://acme.authfi.io',
         'iat' => time() - 7200,
         'exp' => time() - 3600,
     ]);
@@ -225,7 +225,7 @@ test('rejects a token with the wrong issuer', function() {
 
     $token = sign_token($priv, [
         'sub' => 'usr_123',
-        'iss' => 'https://evil.authfi.app',
+        'iss' => 'https://evil.authfi.io',
         'exp' => time() + 3600,
     ]);
 
@@ -245,7 +245,7 @@ test('rejects an unknown kid (refetch attempted, then rejected)', function() {
     // the refetch fails (unroutable) and the token is rejected either way.
     $token = sign_token($priv, [
         'sub' => 'usr_123',
-        'iss' => 'https://acme.authfi.app',
+        'iss' => 'https://acme.authfi.io',
         'exp' => time() + 3600,
     ], TEST_KID);
 
