@@ -65,7 +65,9 @@ class AuthFI {
 
     /** Tenant-scoped JWKS endpoint. */
     private function jwksUrl(): string {
-        return "{$this->apiUrl}/v1/{$this->tenant}/.well-known/jwks.json";
+        // JWKS hangs off the TENANT BASE, not /v1. The edge dispatch is
+        // api.authfi.io/<slug>/<path> — the slug comes FIRST.
+        return "{$this->apiUrl}/{$this->tenant}/.well-known/jwks.json";
     }
 
     /**
@@ -237,7 +239,8 @@ class AuthFI {
         $body = ['permissions' => $perms];
         if ($this->applicationId) $body['application_id'] = $this->applicationId;
 
-        $url = "{$this->apiUrl}/manage/v1/{$this->tenant}/permissions/sync";
+        // No /manage/ prefix exists on the platform; those routes are /v1/*.
+        $url = "{$this->apiUrl}/{$this->tenant}/v1/permissions/sync";
         $ch = curl_init($url);
         curl_setopt_array($ch, [
             CURLOPT_CUSTOMREQUEST => 'PUT',
